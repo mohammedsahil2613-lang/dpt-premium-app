@@ -59,7 +59,9 @@ To create a trusted digital space where:
 
 ---
 
-## Contact
+## Get involved / Early access
 
-For updates or early access:
-- GitHub: https://github.com/mohammedsahil2613-lang
+Interested in updates or early access?  
+Follow this repository or contact the project owner:
+
+**GitHub:** https://github.com/mohammedsahil2613-lang
