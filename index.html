@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="manifest" href="/manifest.json">
-    <title>PWA Example</title>
+    <meta name="description" content="DPT Premium App - Your complete app solution">
+    <link rel="manifest" href="manifest.json">
+    <title>DPT Premium App</title>
+    <!-- Other head content -->
 </head>
 <body>
-    <h1>Welcome to the PWA Demo</h1>
+    <h1>Welcome to DPT Premium App</h1>
+    <!-- Main app content -->
+
     <script>
+        // Register service worker for PWA
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                .then(registration => {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js').then(function (registration) {
                     console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(error => {
+                }).catch(function (error) {
                     console.error('Service Worker registration failed:', error);
                 });
             });
