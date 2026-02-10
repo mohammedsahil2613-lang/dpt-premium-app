@@ -3,25 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DPT Premium App - Your complete app solution">
-    <link rel="manifest" href="manifest.json">
     <title>DPT Premium App</title>
-    <!-- Other head content -->
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        header { background: #007bff; color: white; padding: 20px; text-align: center; }
+        section { padding: 20px; }
+        .role { margin: 20px 0; }
+        .card { width: 300px; height: 300px; perspective: 1000px; }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
+        .card-front { background: #fff; color: black; display: flex; align-items: center; justify-content: center; }
+        .card-back { background: #007bff; color: white; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
+        .card:hover .card-inner { transform: rotateY(180deg); }
+        .form { margin: 20px 0; }
+        .form input, .form button { margin: 5px; padding: 10px; }
+    </style>
 </head>
 <body>
-    <h1>Welcome to DPT Premium App</h1>
-    <!-- Main app content -->
+    <header>
+        <h1>DPT Premium App</h1>
+    </header>
+    <section>
+        <h2>Select Your Role</h2>
+        <div class="role">
+            <button onclick="showForm('businessOwner')">Business Owner</button>
+            <button onclick="showForm('investor')">Investor</button>
+            <button onclick="showForm('customer')">Customer</button>
+        </div>
 
+        <div id="businessOwner" class="form" style="display:none;">
+            <h3>Business Owner Form</h3>
+            <input type="text" placeholder="Business Name" required />
+            <input type="text" placeholder="Owner Name" required />
+            <button onclick="submitForm('businessOwner')">Submit</button>
+        </div>
+
+        <div id="investor" class="form" style="display:none;">
+            <h3>Investor Form</h3>
+            <input type="text" placeholder="Investment Amount" required />
+            <button onclick="submitForm('investor')">Submit</button>
+        </div>
+
+        <div id="customer" class="form" style="display:none;">
+            <h3>Customer Form</h3>
+            <input type="text" placeholder="Purchase Item" required />
+            <button onclick="submitForm('customer')">Submit</button>
+        </div>
+
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-front">3D Animation Card - Front</div>
+                <div class="card-back">3D Animation Card - Back</div>
+            </div>
+        </div>
+    </section>
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
     <script>
-        // Register service worker for PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function () {
-                navigator.serviceWorker.register('service-worker.js').then(function (registration) {
-                    console.log('Service Worker registered with scope:', registration.scope);
-                }).catch(function (error) {
-                    console.error('Service Worker registration failed:', error);
-                });
-            });
+        function showForm(role) {
+            document.querySelectorAll('.form').forEach(f => f.style.display = 'none');
+            document.getElementById(role).style.display = 'block';
+        }
+
+        function submitForm(role) {
+            alert(role + ' form submitted!');
+            // Integrate PayPal and PDF generation as needed.
         }
     </script>
 </body>
