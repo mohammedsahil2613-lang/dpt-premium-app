@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <style>
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; text-align:center; background: linear-gradient(135deg, #0B3D0B, #123F2A); color:#fff; }
-h1,h2 { margin:10px; font-family:'FX Display', serif; text-shadow: 1px 1px 5px #000; }
+h1,h2 { margin:10px; text-shadow: 1px 1px 5px #000; }
 button { padding:12px 25px; margin:8px; font-size:16px; border:none; border-radius:8px; cursor:pointer; transition:0.3s; }
 button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
 #roleSection { margin:20px; font-size:16px; }
@@ -39,6 +39,7 @@ button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
 
 <div id="roleSection"></div>
 
+<!-- Cards -->
 <div id="businessCard" class="card">
   <h2>Business Card</h2>
   <p>⭐ ⭐ ⭐ ⭐ ⭐</p>
@@ -62,7 +63,7 @@ button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
   </div>
   <div class="analytics">
     <h3>Analysis</h3>
-    <p>Insights for investors only. No business card displayed.</p>
+    <p>Insights for investors only.</p>
   </div>
 </div>
 
@@ -72,55 +73,16 @@ button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
 </div>
 
 <script>
-// Multi-language support
+// Multi-language texts
 const texts = {
-  en: {
-    selectRole: "Select Your Role:",
-    businessOwner: "Business Owner",
-    investor: "Investor",
-    customer: "Customer",
-    payBusiness: "Pay $30 to Unlock Premium Access",
-    payInvestor: "Pay $20 to Unlock Access",
-    customerFree: "Customer access: free"
-  },
-  ar: {
-    selectRole: "اختر دورك:",
-    businessOwner: "مالك أعمال",
-    investor: "مستثمر",
-    customer: "زبون",
-    payBusiness: "ادفع 30$ للوصول المميز",
-    payInvestor: "ادفع 20$ للوصول",
-    customerFree: "الوصول مجاني للزبائن"
-  },
-  fr: {
-    selectRole: "Sélectionnez votre rôle:",
-    businessOwner: "Propriétaire",
-    investor: "Investisseur",
-    customer: "Client",
-    payBusiness: "Payez 30$ pour accéder au Premium",
-    payInvestor: "Payez 20$ pour accéder",
-    customerFree: "Accès gratuit pour les clients"
-  },
-  es: {
-    selectRole: "Seleccione su rol:",
-    businessOwner: "Propietario",
-    investor: "Inversor",
-    customer: "Cliente",
-    payBusiness: "Pague $30 para desbloquear acceso Premium",
-    payInvestor: "Pague $20 para desbloquear acceso",
-    customerFree: "Acceso gratuito para clientes"
-  },
-  de: {
-    selectRole: "Wählen Sie Ihre Rolle:",
-    businessOwner: "Geschäftsinhaber",
-    investor: "Investor",
-    customer: "Kunde",
-    payBusiness: "Zahlen Sie $30, um Premium freizuschalten",
-    payInvestor: "Zahlen Sie $20, um Zugang freizuschalten",
-    customerFree: "Kostenloser Zugriff für Kunden"
-  }
+  en: { selectRole:"Select Your Role:", businessOwner:"Business Owner", investor:"Investor", customer:"Customer", payBusiness:"Pay $30 to Unlock Premium Access", payInvestor:"Pay $20 to Unlock Access", customerFree:"Customer access: free" },
+  ar: { selectRole:"اختر دورك:", businessOwner:"مالك أعمال", investor:"مستثمر", customer:"زبون", payBusiness:"ادفع 30$ للوصول المميز", payInvestor:"ادفع 20$ للوصول", customerFree:"الوصول مجاني للزبائن" },
+  fr: { selectRole:"Sélectionnez votre rôle:", businessOwner:"Propriétaire", investor:"Investisseur", customer:"Client", payBusiness:"Payez 30$ pour accéder au Premium", payInvestor:"Payez 20$ pour accéder", customerFree:"Accès gratuit pour les clients" },
+  es: { selectRole:"Seleccione su rol:", businessOwner:"Propietario", investor:"Inversor", customer:"Cliente", payBusiness:"Pague $30 para desbloquear acceso Premium", payInvestor:"Pague $20 para desbloquear acceso", customerFree:"Acceso gratuito para clientes" },
+  de: { selectRole:"Wählen Sie Ihre Rolle:", businessOwner:"Geschäftsinhaber", investor:"Investor", customer:"Kunde", payBusiness:"Zahlen Sie $30, um Premium freizuschalten", payInvestor:"Zahlen Sie $20, um Zugang freizuschalten", customerFree:"Kostenloser Zugriff für Kunden" }
 };
 
+// Set language
 function setLanguage(lang) {
   localStorage.setItem("lang", lang);
   const t = texts[lang];
@@ -130,18 +92,19 @@ function setLanguage(lang) {
   document.querySelector("button[onclick*='Customer']").innerText = t.customer;
 }
 
+// Role selection
 function selectRole(role) {
   localStorage.setItem('userRole', role);
   const section = document.getElementById('roleSection');
-  document.getElementById('businessCard').style.display = 'none';
-  document.getElementById('investorHighlights').style.display = 'none';
-  document.getElementById('customerStars').style.display = 'none';
 
-  const t = texts[localStorage.getItem("lang") || "en"];
+  document.getElementById('businessCard').style.display='none';
+  document.getElementById('investorHighlights').style.display='none';
+  document.getElementById('customerStars').style.display='none';
 
-  if(role === 'BusinessOwner') {
-    section.innerHTML = `
-      <p>${t.payBusiness}</p>
+  const t = texts[localStorage.getItem("lang")||"en"];
+
+  if(role==='BusinessOwner') {
+    section.innerHTML=`<p>${t.payBusiness}</p>
       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
         <input type="hidden" name="cmd" value="_xclick">
         <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
@@ -150,11 +113,11 @@ function selectRole(role) {
         <input type="hidden" name="currency_code" value="USD">
         <input type="submit" value="${t.payBusiness}">
       </form>
-      <button onclick="unlockBusinessCard()">I Paid</button>
-    `;
-  } else if(role === 'Investor') {
-    section.innerHTML = `
-      <p>${t.payInvestor}</p>
+      <button id="paidBusinessBtn">I Paid</button>`;
+    document.getElementById('paidBusinessBtn').onclick=unlockBusinessCard;
+
+  } else if(role==='Investor') {
+    section.innerHTML=`<p>${t.payInvestor}</p>
       <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
         <input type="hidden" name="cmd" value="_xclick">
         <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
@@ -163,50 +126,36 @@ function selectRole(role) {
         <input type="hidden" name="currency_code" value="USD">
         <input type="submit" value="${t.payInvestor}">
       </form>
-      <button onclick="unlockInvestor()">I Paid</button>
-    `;
+      <button id="paidInvestorBtn">I Paid</button>`;
+    document.getElementById('paidInvestorBtn').onclick=unlockInvestor;
+
   } else {
-    section.innerHTML = t.customerFree;
-    document.getElementById('customerStars').style.display = 'block';
+    section.innerHTML=t.customerFree;
+    document.getElementById('customerStars').style.display='block';
   }
 }
 
-function unlockBusinessCard() {
-  localStorage.setItem('businessOwnerPaid','true');
-  showContent(true);
+// Unlock functions
+function unlockBusinessCard(){ localStorage.setItem('businessOwnerPaid','true'); showContent(); }
+function unlockInvestor(){ localStorage.setItem('investorPaid','true'); showContent(); }
+
+// Show content
+function showContent(){
+  const role=localStorage.getItem('userRole');
+  document.getElementById('businessCard').style.display='none';
+  document.getElementById('investorHighlights').style.display='none';
+  document.getElementById('customerStars').style.display='none';
+  if(role==='BusinessOwner' && localStorage.getItem('businessOwnerPaid')==='true') document.getElementById('businessCard').style.display='block';
+  else if(role==='Investor' && localStorage.getItem('investorPaid')==='true') document.getElementById('investorHighlights').style.display='block';
+  else if(role==='Customer') document.getElementById('customerStars').style.display='block';
 }
 
-function unlockInvestor() {
-  localStorage.setItem('investorPaid','true');
-  showContent(true);
-}
-
-function showContent(fromUnlock=false) {
-  const role = localStorage.getItem('userRole');
-  document.getElementById('businessCard').style.display = 'none';
-  document.getElementById('investorHighlights').style.display = 'none';
-  document.getElementById('customerStars').style.display = 'none';
-
-  if(role === 'BusinessOwner' && (localStorage.getItem('businessOwnerPaid') === 'true' || fromUnlock)) {
-    document.getElementById('businessCard').style.display = 'block';
-  } else if(role === 'Investor' && (localStorage.getItem('investorPaid') === 'true' || fromUnlock)) {
-    document.getElementById('investorHighlights').style.display = 'block';
-  } else if(role === 'Customer') {
-    document.getElementById('customerStars').style.display = 'block';
-  }
-}
-
-// Service Worker registration
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('Service Worker Registered'));
-}
-
-// Initialize language on load
-window.onload = () => {
-  const lang = localStorage.getItem("lang") || "en";
-  document.getElementById('langSelect').value = lang;
-  setLanguage(lang);
+// Init
+window.onload=()=>{
+  setLanguage(localStorage.getItem("lang")||"en");
+  document.getElementById('langSelect').value=localStorage.getItem("lang")||"en";
+  showContent();
+  if('serviceWorker' in navigator){ navigator.serviceWorker.register('/service-worker.js').then(()=>console.log('SW registered')); }
 };
 </script>
 </body>
