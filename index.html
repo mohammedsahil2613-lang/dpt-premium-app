@@ -16,12 +16,23 @@ button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
 #investorHighlights { background:#123F5E; color:#fff; }
 #customerStars { background:#009688; color:#fff; font-weight:bold; font-size:18px; }
 .report, .analytics { margin-top:15px; text-align:left; padding:10px; background:rgba(255,255,255,0.05); border-radius:10px; }
+#langSelect { padding:5px 10px; margin:10px; border-radius:5px; }
 </style>
 </head>
 <body>
 
 <h1>DPT Premium App</h1>
-<p>Select Your Role:</p>
+
+<label for="langSelect">Language:</label>
+<select id="langSelect" onchange="setLanguage(this.value)">
+  <option value="en">English</option>
+  <option value="ar">Arabic</option>
+  <option value="fr">French</option>
+  <option value="es">Spanish</option>
+  <option value="de">German</option>
+</select>
+
+<p id="selectRoleText"></p>
 <button onclick="selectRole('BusinessOwner')" style="background:#0B3D0B; color:#C0C0C0;">Business Owner</button>
 <button onclick="selectRole('Investor')" style="background:#123F5E; color:#C0C0C0;">Investor</button>
 <button onclick="selectRole('Customer')" style="background:#009688; color:#fff;">Customer</button>
@@ -62,80 +73,67 @@ button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
 </div>
 
 <script>
-// Role selection logic
-function selectRole(role) {
-  localStorage.setItem('userRole', role);
-  const section = document.getElementById('roleSection');
-  
-  document.getElementById('businessCard').style.display = 'none';
-  document.getElementById('investorHighlights').style.display = 'none';
-  document.getElementById('customerStars').style.display = 'none';
-  
-  if(role === 'BusinessOwner') {
-    section.innerHTML = `
-      <p>Pay $30 to unlock full Business Owner access:</p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-        <input type="hidden" name="cmd" value="_xclick">
-        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
-        <input type="hidden" name="item_name" value="DPT Premium App – Business Owner">
-        <input type="hidden" name="amount" value="30.00">
-        <input type="hidden" name="currency_code" value="USD">
-        <input type="submit" value="Pay $30 to Unlock Premium Access">
-      </form>
-      <button onclick="unlockBusinessCard()">I Paid</button>
-    `;
-  } else if(role === 'Investor') {
-    section.innerHTML = `
-      <p>Pay $20 to unlock Investor access:</p>
-      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-        <input type="hidden" name="cmd" value="_xclick">
-        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
-        <input type="hidden" name="item_name" value="DPT Premium App – Investor">
-        <input type="hidden" name="amount" value="20.00">
-        <input type="hidden" name="currency_code" value="USD">
-        <input type="submit" value="Pay $20 to Unlock Access">
-      </form>
-      <button onclick="unlockInvestor()">I Paid</button>
-    `;
-  } else {
-    section.innerHTML = 'Customer access: free';
-    document.getElementById('customerStars').style.display = 'block';
+// Multi-language support
+const texts = {
+  en: { selectRole:"Select Your Role:", businessOwner:"Business Owner", investor:"Investor", customer:"Customer", payBusiness:"Pay $30 to Unlock Premium Access", payInvestor:"Pay $20 to Unlock Access", customerFree:"Customer access: free" },
+  ar: { selectRole:"اختر دورك:", businessOwner:"مالك أعمال", investor:"مستثمر", customer:"زبون", payBusiness:"ادفع 30$ للوصول المميز", payInvestor:"ادفع 20$ للوصول", customerFree:"الوصول مجاني للزبائن" },
+  fr: { selectRole:"Sélectionnez votre rôle:", businessOwner:"Propriétaire", investor:"Investisseur", customer:"Client", payBusiness:"Payez 30$ pour accéder au Premium", payInvestor:"Payez 20$ pour accéder", customerFree:"Accès gratuit pour les clients" },
+  es: { selectRole:"Seleccione su rol:", businessOwner:"Propietario", investor:"Inversor", customer:"Cliente", payBusiness:"Pague $30 para desbloquear acceso Premium", payInvestor:"Pague $20 para desbloquear acceso", customerFree:"Acceso gratuito para clientes" },
+  de: { selectRole:"Wählen Sie Ihre Rolle:", businessOwner:"Geschäftsinhaber", investor:"Investor", customer:"Kunde", payBusiness:"Zahlen Sie $30, um Premium freizuschalten", payInvestor:"Zahlen Sie $20, um Zugang freizuschalten", customerFree:"Kostenloser Zugriff für Kunden" }
+};
+
+// Set language
+function setLanguage(lang){
+  localStorage.setItem("lang", lang);
+  const t=texts[lang];
+  document.getElementById('selectRoleText').innerText=t.selectRole;
+  document.querySelector("button[onclick*='BusinessOwner']").innerText=t.businessOwner;
+  document.querySelector("button[onclick*='Investor']").innerText=t.investor;
+  document.querySelector("button[onclick*='Customer']").innerText=t.customer;
+  updateRoleSection();
+}
+
+// Update role section
+function updateRoleSection(){
+  const role=localStorage.getItem('userRole');
+  const lang=localStorage.getItem('lang')||'en';
+  const t=texts[lang];
+  const section=document.getElementById('roleSection');
+  hideAllCards();
+  if(!role){ section.innerHTML=''; return; }
+  if(role==='BusinessOwner'){
+    if(localStorage.getItem('businessOwnerPaid')==='true'){ showCard('BusinessOwner'); section.innerHTML=''; }
+    else section.innerHTML=`<p>${t.payBusiness}</p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"><input type="hidden" name="cmd" value="_xclick"><input type="hidden" name="business" value="mohammedsahil2613@gmail.com"><input type="hidden" name="item_name" value="DPT Premium App – Business Owner"><input type="hidden" name="amount" value="30.00"><input type="hidden" name="currency_code" value="USD"><input type="submit" value="${t.payBusiness}"></form><button onclick="unlockBusinessCard()">I Paid</button>`; 
   }
-}
-
-// Unlock content
-function unlockBusinessCard() {
-  localStorage.setItem('businessOwnerPaid','true');
-  showContent();
-}
-
-function unlockInvestor() {
-  localStorage.setItem('investorPaid','true');
-  showContent();
-}
-
-// Show content based on role + payment
-function showContent() {
-  const role = localStorage.getItem('userRole');
-  
-  document.getElementById('businessCard').style.display = 'none';
-  document.getElementById('investorHighlights').style.display = 'none';
-  document.getElementById('customerStars').style.display = 'none';
-  
-  if(role === 'BusinessOwner' && localStorage.getItem('businessOwnerPaid') === 'true') {
-    document.getElementById('businessCard').style.display = 'block';
-  } else if(role === 'Investor' && localStorage.getItem('investorPaid') === 'true') {
-    document.getElementById('investorHighlights').style.display = 'block';
-  } else if(role === 'Customer') {
-    document.getElementById('customerStars').style.display = 'block';
+  if(role==='Investor'){
+    if(localStorage.getItem('investorPaid')==='true'){ showCard('Investor'); section.innerHTML=''; }
+    else section.innerHTML=`<p>${t.payInvestor}</p><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"><input type="hidden" name="cmd" value="_xclick"><input type="hidden" name="business" value="mohammedsahil2613@gmail.com"><input type="hidden" name="item_name" value="DPT Premium App – Investor"><input type="hidden" name="amount" value="20.00"><input type="hidden" name="currency_code" value="USD"><input type="submit" value="${t.payInvestor}"></form><button onclick="unlockInvestor()">I Paid</button>`; 
   }
+  if(role==='Customer'){ section.innerHTML=t.customerFree; showCard('Customer'); }
 }
 
-// Register service worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/service-worker.js')
-    .then(()=>console.log('Service Worker Registered'));
+// Hide all cards
+function hideAllCards(){
+  document.getElementById('businessCard').style.display='none';
+  document.getElementById('investorHighlights').style.display='none';
+  document.getElementById('customerStars').style.display='none';
 }
+
+// Show card
+function showCard(role){ hideAllCards(); if(role==='BusinessOwner') document.getElementById('businessCard').style.display='block'; if(role==='Investor') document.getElementById('investorHighlights').style.display='block'; if(role==='Customer') document.getElementById('customerStars').style.display='block'; }
+
+// Select role
+function selectRole(role){ localStorage.setItem('userRole',role); updateRoleSection(); }
+
+// Unlock buttons
+function unlockBusinessCard(){ localStorage.setItem('businessOwnerPaid','true'); showCard('BusinessOwner'); document.getElementById('roleSection').innerHTML=''; }
+function unlockInvestor(){ localStorage.setItem('investorPaid','true'); showCard('Investor'); document.getElementById('roleSection').innerHTML=''; }
+
+// Service Worker (optional)
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/service-worker.js').then(()=>console.log('SW registered')); }
+
+// Initialize
+window.onload=()=>{ const lang=localStorage.getItem('lang')||'en'; document.getElementById('langSelect').value=lang; setLanguage(lang); };
 </script>
 
 </body>
