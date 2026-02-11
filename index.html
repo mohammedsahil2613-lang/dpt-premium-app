@@ -1,73 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DPT Premium App</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #007bff; color: white; padding: 20px; text-align: center; }
-        section { padding: 20px; }
-        .role { margin: 20px 0; }
-        .card { width: 300px; height: 300px; perspective: 1000px; }
-        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; }
-        .card-front { background: #fff; color: black; display: flex; align-items: center; justify-content: center; }
-        .card-back { background: #007bff; color: white; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; }
-        .card:hover .card-inner { transform: rotateY(180deg); }
-        .form { margin: 20px 0; }
-        .form input, .form button { margin: 5px; padding: 10px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPT Premium App</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin:0; padding:0; text-align:center; background: linear-gradient(135deg, #0B3D0B, #123F2A); color:#fff; }
+h1,h2 { margin:10px; font-family:'FX Display', serif; text-shadow: 1px 1px 5px #000; }
+button { padding:12px 25px; margin:8px; font-size:16px; border:none; border-radius:8px; cursor:pointer; transition:0.3s; }
+button:hover { transform:scale(1.05); box-shadow:0 0 10px #fff; }
+#roleSection { margin:20px; font-size:16px; }
+.card { display:none; padding:20px; margin:20px auto; border-radius:15px; width:90%; max-width:400px; box-shadow:0 10px 20px rgba(0,0,0,0.6); text-align:center; }
+#businessCard { background: linear-gradient(145deg, #0B3D0B, #2B6D2B); color:#000; font-weight:bold; font-size:20px; }
+#investorHighlights { background:#123F5E; color:#fff; }
+#customerStars { background:#009688; color:#fff; font-weight:bold; font-size:18px; }
+.report, .analytics { margin-top:15px; text-align:left; padding:10px; background:rgba(255,255,255,0.05); border-radius:10px; }
+</style>
 </head>
 <body>
-    <header>
-        <h1>DPT Premium App</h1>
-    </header>
-    <section>
-        <h2>Select Your Role</h2>
-        <div class="role">
-            <button onclick="showForm('businessOwner')">Business Owner</button>
-            <button onclick="showForm('investor')">Investor</button>
-            <button onclick="showForm('customer')">Customer</button>
-        </div>
 
-        <div id="businessOwner" class="form" style="display:none;">
-            <h3>Business Owner Form</h3>
-            <input type="text" placeholder="Business Name" required />
-            <input type="text" placeholder="Owner Name" required />
-            <button onclick="submitForm('businessOwner')">Submit</button>
-        </div>
+<h1>DPT Premium App</h1>
+<p>Select Your Role:</p>
+<button onclick="selectRole('BusinessOwner')" style="background:#0B3D0B; color:#C0C0C0;">Business Owner</button>
+<button onclick="selectRole('Investor')" style="background:#123F5E; color:#C0C0C0;">Investor</button>
+<button onclick="selectRole('Customer')" style="background:#009688; color:#fff;">Customer</button>
 
-        <div id="investor" class="form" style="display:none;">
-            <h3>Investor Form</h3>
-            <input type="text" placeholder="Investment Amount" required />
-            <button onclick="submitForm('investor')">Submit</button>
-        </div>
+<div id="roleSection"></div>
 
-        <div id="customer" class="form" style="display:none;">
-            <h3>Customer Form</h3>
-            <input type="text" placeholder="Purchase Item" required />
-            <button onclick="submitForm('customer')">Submit</button>
-        </div>
+<!-- Content Sections -->
+<div id="businessCard" class="card">
+  <h2>Business Card</h2>
+  <p>⭐ ⭐ ⭐ ⭐ ⭐</p>
+  <div class="report">
+    <h3>Last Report</h3>
+    <p>Revenue: $120,000</p>
+    <p>Growth: 15%</p>
+  </div>
+  <div class="analytics">
+    <h3>Analysis</h3>
+    <p>Insights and recommendations for your business.</p>
+  </div>
+</div>
 
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front">3D Animation Card - Front</div>
-                <div class="card-back">3D Animation Card - Back</div>
-            </div>
-        </div>
-    </section>
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID"></script>
-    <script>
-        function showForm(role) {
-            document.querySelectorAll('.form').forEach(f => f.style.display = 'none');
-            document.getElementById(role).style.display = 'block';
-        }
+<div id="investorHighlights" class="card">
+  <h2>Investor Highlights</h2>
+  <div class="report">
+    <h3>Last Report</h3>
+    <p>Revenue: $120,000</p>
+    <p>Growth: 15%</p>
+  </div>
+  <div class="analytics">
+    <h3>Analysis</h3>
+    <p>Insights for investors only. No business card displayed.</p>
+  </div>
+</div>
 
-        function submitForm(role) {
-            alert(role + ' form submitted!');
-            // Integrate PayPal and PDF generation as needed.
-        }
-    </script>
+<div id="customerStars" class="card">
+  <h2>Customer Report</h2>
+  <p>⭐⭐⭐</p>
+</div>
+
+<script>
+// Role selection logic
+function selectRole(role) {
+  localStorage.setItem('userRole', role);
+  const section = document.getElementById('roleSection');
+  
+  document.getElementById('businessCard').style.display = 'none';
+  document.getElementById('investorHighlights').style.display = 'none';
+  document.getElementById('customerStars').style.display = 'none';
+  
+  if(role === 'BusinessOwner') {
+    section.innerHTML = `
+      <p>Pay $30 to unlock full Business Owner access:</p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
+        <input type="hidden" name="item_name" value="DPT Premium App – Business Owner">
+        <input type="hidden" name="amount" value="30.00">
+        <input type="hidden" name="currency_code" value="USD">
+        <input type="submit" value="Pay $30 to Unlock Premium Access">
+      </form>
+      <button onclick="unlockBusinessCard()">I Paid</button>
+    `;
+  } else if(role === 'Investor') {
+    section.innerHTML = `
+      <p>Pay $20 to unlock Investor access:</p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
+        <input type="hidden" name="item_name" value="DPT Premium App – Investor">
+        <input type="hidden" name="amount" value="20.00">
+        <input type="hidden" name="currency_code" value="USD">
+        <input type="submit" value="Pay $20 to Unlock Access">
+      </form>
+      <button onclick="unlockInvestor()">I Paid</button>
+    `;
+  } else {
+    section.innerHTML = 'Customer access: free';
+    document.getElementById('customerStars').style.display = 'block';
+  }
+}
+
+// Unlock content
+function unlockBusinessCard() {
+  localStorage.setItem('businessOwnerPaid','true');
+  showContent();
+}
+
+function unlockInvestor() {
+  localStorage.setItem('investorPaid','true');
+  showContent();
+}
+
+// Show content based on role + payment
+function showContent() {
+  const role = localStorage.getItem('userRole');
+  
+  document.getElementById('businessCard').style.display = 'none';
+  document.getElementById('investorHighlights').style.display = 'none';
+  document.getElementById('customerStars').style.display = 'none';
+  
+  if(role === 'BusinessOwner' && localStorage.getItem('businessOwnerPaid') === 'true') {
+    document.getElementById('businessCard').style.display = 'block';
+  } else if(role === 'Investor' && localStorage.getItem('investorPaid') === 'true') {
+    document.getElementById('investorHighlights').style.display = 'block';
+  } else if(role === 'Customer') {
+    document.getElementById('customerStars').style.display = 'block';
+  }
+}
+
+// Register service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+    .then(()=>console.log('Service Worker Registered'));
+}
+</script>
+
 </body>
 </html>
