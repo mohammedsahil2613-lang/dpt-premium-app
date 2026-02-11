@@ -1,1 +1,71 @@
-{"name":"DPT Premium App","short_name":"DPT App","start_url":".","display":"standalone","background_color":"#ffffff","theme_color":"#000000","description":"A premium app for DPT services.","icons":[{"src":"icons/icon-192x192.png","sizes":"192x192","type":"image/png"},{"src":"icons/icon-512x512.png","sizes":"512x512","type":"image/png"}]}
+// Role selection logic
+function selectRole(role) {
+  localStorage.setItem('userRole', role);
+  const section = document.getElementById('roleSection');
+
+  document.getElementById('businessCard').style.display = 'none';
+  document.getElementById('investorHighlights').style.display = 'none';
+  document.getElementById('customerStars').style.display = 'none';
+
+  const lang = localStorage.getItem("lang") || "en";
+  const t = texts[lang];
+
+  if(role === 'BusinessOwner') {
+    section.innerHTML = `
+      <p>${t.payBusiness}</p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
+        <input type="hidden" name="item_name" value="DPT Premium App – Business Owner">
+        <input type="hidden" name="amount" value="30.00">
+        <input type="hidden" name="currency_code" value="USD">
+        <input type="submit" value="${t.payBusiness}">
+      </form>
+      <button onclick="unlockBusinessCard()">I Paid</button>
+    `;
+  } else if(role === 'Investor') {
+    section.innerHTML = `
+      <p>${t.payInvestor}</p>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+        <input type="hidden" name="cmd" value="_xclick">
+        <input type="hidden" name="business" value="mohammedsahil2613@gmail.com">
+        <input type="hidden" name="item_name" value="DPT Premium App – Investor">
+        <input type="hidden" name="amount" value="20.00">
+        <input type="hidden" name="currency_code" value="USD">
+        <input type="submit" value="${t.payInvestor}">
+      </form>
+      <button onclick="unlockInvestor()">I Paid</button>
+    `;
+  } else {
+    section.innerHTML = t.customerFree;
+    document.getElementById('customerStars').style.display = 'block';
+  }
+}
+
+// Unlock content
+function unlockBusinessCard() {
+  localStorage.setItem('businessOwnerPaid','true');
+  showContent(true);
+}
+
+function unlockInvestor() {
+  localStorage.setItem('investorPaid','true');
+  showContent(true);
+}
+
+// Show content based on role + payment
+function showContent(fromUnlock=false) {
+  const role = localStorage.getItem('userRole');
+
+  document.getElementById('businessCard').style.display = 'none';
+  document.getElementById('investorHighlights').style.display = 'none';
+  document.getElementById('customerStars').style.display = 'none';
+
+  if(role === 'BusinessOwner' && (localStorage.getItem('businessOwnerPaid') === 'true' || fromUnlock)) {
+    document.getElementById('businessCard').style.display = 'block';
+  } else if(role === 'Investor' && (localStorage.getItem('investorPaid') === 'true' || fromUnlock)) {
+    document.getElementById('investorHighlights').style.display = 'block';
+  } else if(role === 'Customer') {
+    document.getElementById('customerStars').style.display = 'block';
+  }
+}
