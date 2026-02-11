@@ -1,15 +1,7 @@
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open('dpt-cache').then((cache) => cache.addAll([
-      '/',
-      '/index.html',
-      '/manifest.json'
-    ]))
-  );
+// Basic service worker
+self.addEventListener('install', event => {
+  console.log('Service Worker Installed');
 });
-
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
-  );
+self.addEventListener('activate', event => {
+  console.log('Service Worker Activated');
 });
