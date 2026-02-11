@@ -161,3 +161,11 @@ window.onload=()=>{
 </body>
 </html>
 Replace index.html with full working all-in-one version
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/dpt-premium-app/service-worker.js')
+    .then(() => console.log('Service Worker Registered'));
+}
+</script>
+</body>
+</html>
