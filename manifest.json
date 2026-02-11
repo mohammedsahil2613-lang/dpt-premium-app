@@ -1,21 +1,8 @@
-{
-  "name": "DPT Premium App",
-  "short_name": "DPT App",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
-  "description": "A premium app for DPT services.",
-  "icons": [
-    {
-      "src": "icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+// Multi-language texts
+const texts = {
+  en: { selectRole:"Select Your Role:", businessOwner:"Business Owner", ... },
+  ar: {...}, 
+  fr: {...}, 
+  es: {...}, 
+  de: {...}
+};
