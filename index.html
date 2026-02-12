@@ -169,3 +169,66 @@ if ('serviceWorker' in navigator) {
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPT Premium App</title>
+<link rel="manifest" href="manifest.json">
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; }
+.card { border: 1px solid #ccc; padding: 15px; margin: 15px 0; border-radius: 8px; }
+button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>DPT Premium App</h1>
+
+<label for="langSelect">Language:</label>
+<select id="langSelect" onchange="setLang(this.value)">
+    <option value="en">English</option>
+    <option value="ar">Arabic</option>
+    <option value="fr">French</option>
+    <option value="es">Spanish</option>
+    <option value="de">German</option>
+</select>
+
+<p id="selectRoleText">Select your role:</p>
+<button onclick="selectRole('BusinessOwner')">Business Owner</button>
+<button onclick="selectRole('Investor')">Investor</button>
+<button onclick="selectRole('Customer')">Customer</button>
+
+<div id="roleSection"></div>
+
+<script>
+// Language handler
+function setLang(lang) {
+    alert("Language set to: " + lang);
+}
+
+// Role selection
+function selectRole(role) {
+    const container = document.getElementById('roleSection');
+    container.innerHTML = '';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<h2>${role} Dashboard</h2>
+        <div class="report">
+            <h3>Last Report</h3>
+            <p>Revenue: $120,000</p>
+            <p>Growth: 15%</p>
+        </div>
+        <div class="analytics">
+            <h3>Analytics</h3>
+            <p>Insights and trends will appear here.</p>
+        </div>`;
+    container.appendChild(card);
+}
+</script>
+
+</body>
+</html>
+
