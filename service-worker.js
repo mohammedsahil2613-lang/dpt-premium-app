@@ -34,3 +34,14 @@ self.addEventListener("fetch", event => {
     caches.match(event.request).then(resp => resp || fetch(event.request))
   );
 });
+self.addEventListener('install', function(event) {
+    console.log('Service Worker installed');
+});
+
+self.addEventListener('activate', function(event) {
+    console.log('Service Worker activated');
+});
+
+self.addEventListener('fetch', function(event) {
+    event.respondWith(fetch(event.request));
+});
